@@ -6,16 +6,10 @@ class FnLib():
             "process2": self.__proc2
         }
     
-    def forward(self, value=1111):
-        if len(self.selected_processes) > 0:
-            out = self.processes[self.selected_processes[0]](value)
-        else:
-            return None
-        
-        if len(self.selected_processes) > 1:
-            for proc_num in range(1, len(self.selected_processes)):
-                out = self.processes[self.selected_processes[proc_num]](out)
-        return out
+    def forward(self, value: int):
+        for sp in self.selected_processes:
+            value = self.processes[sp](value)
+        return value
     
     def __proc1(self, i: int):
         print("Process (1): " + str(i))
