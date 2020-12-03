@@ -1,8 +1,11 @@
 # python_playground
-just random python scraps
+Just random python scraps & examples
 
 ## bytes
-playing around with byte and float conversions in python
+- Playing around with byte and float conversions in python
+
+## function serving
+- A nice way to have a large library of functions where the toolchain can be specified per instance - without needing to modify the source code. Minimal duplication.
 
 ## masking
-testing out numpy masking arrays etc.
+- Testing out numpy masking arrays etc.
