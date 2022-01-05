@@ -1,5 +1,5 @@
 # python_playground
-Just random python scraps & examples.
+Just random python scraps & examples that I play around with to test things.
 
 ---
 ---
