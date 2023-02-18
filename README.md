@@ -1,5 +1,12 @@
 # python_playground
-Just random python scraps & examples.
+Just random python scraps & examples that I play around with to test things.
+
+---
+---
+## arguments
+| File | Descrption |
+| ---- | ---------- |
+| [use_argument_choices](arguments/use_argument_choices.py) | uses arguments within a fixed range os strings |
 
 ---
 ---
