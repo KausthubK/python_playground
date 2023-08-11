@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "mac-m1-issues"
+version = "0.1.0"
+description = ""
+authors = ["Kausthub Krishnamurthy <kausthub.k@live.com>"]
+readme = "README.md"
+packages = [{include = "mac_m1_issues"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+SQLAlchemy = "^1.4.26"
+greenlet = "^2.0.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
