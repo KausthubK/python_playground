@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "dataframe-validation"
+version = "0.1.0"
+description = ""
+authors = ["Kausthub Krishnamurthy <kausthub.k@live.com>"]
+readme = "README.md"
+packages = [{include = "dataframe_validation"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pandera = "^0.16.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
