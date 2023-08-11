@@ -1,8 +1,6 @@
-import pandas as pd
 import pandera as pa
-from pandera.typing import Series, DataFrame
+from pandera.typing import Series
 from typing import List
-import pydantic
 
 class ItemWithGroupNameSchema(pa.DataFrameModel):
     id: Series[str] = pa.Field(unique=True)
