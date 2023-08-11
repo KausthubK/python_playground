@@ -12,11 +12,3 @@ good_df = pd.DataFrame({
     "val_1": ["foo", "bar", "baz", "qux"],
     "group_name": ["A", "B", "C", "A"]
 })
-
-validated_df = ItemWithGroupNameSchema(good_df)
-
-print(validated_df)
-
-out_df = group_by_group_name(df=validated_df)
-
-print(out_df)
