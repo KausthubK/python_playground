@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "try-out-modin"
+version = "0.1.0"
+description = ""
+authors = ["Kausthub Krishnamurthy <kausthub.k@live.com>"]
+readme = "README.md"
+packages = [{include = "try_out_modin"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+modin = "^0.24.1"
+ray = "^2.7.1"
+
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.26.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
