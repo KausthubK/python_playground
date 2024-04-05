@@ -1,10 +1,10 @@
 import sqlite3
 
-connection = sqlite3.connect('data.db')
+connection = sqlite3.connect('./data.db')
 cursor = connection.cursor()
 
 create_table = f"""
-CREATE TABLE users (id int, username text, password text)
+CREATE TABLE users (id integer, username text, password text)
 """
 
 cursor.execute(create_table)
