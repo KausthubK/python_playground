@@ -1,9 +1,8 @@
 from enum import Enum
-from hypothesis import given, strategies as st
-from pydantic import UUID4, BaseModel, conint, constr
-
+from pydantic import UUID4
+from uuid import uuid4
 import datetime
-from typing import Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, List, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -45,7 +44,17 @@ class Blah:
         return key in self.additional_properties
 
 
-@given(st.builds(Blah))
-def test_blah(instance):
-    assert isinstance(instance, Blah)
-    # assert instance.id == '00000000-0000-0000-0000-000000000000'
+class BlahAPI():
+    def __init__(self, host: str,):
+        self.host = host
+
+    def create_a_blah(self) -> Blah:
+        return Blah(
+            created_by="me",
+            created_at=datetime.datetime.now(),
+            archived=False,
+            name="name",
+            id=uuid4(),
+            status=Status.ACTIVE,
+            project_id=uuid4(),
+        )
