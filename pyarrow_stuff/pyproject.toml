@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "pyarrow-stuff"
+version = "0.1.0"
+description = ""
+authors = ["Kausthub Krishnamurthy <kausthub.k@live.com>"]
+readme = "README.md"
+packages = [{include = "pyarrow_stuff"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pyarrow = "^20.0.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
