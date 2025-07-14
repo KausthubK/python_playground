@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "imagey-stuff"
+version = "0.1.0"
+description = ""
+authors = ["Kausthub Krishnamurthy <kausthub.k@live.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pillow = "^11.3.0"
+opencv-python = "^4.12.0.88"
+scikit-image = "^0.25.2"
+matplotlib = "^3.10.3"
+colorama = "^0.4.6"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
