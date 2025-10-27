@@ -22,4 +22,3 @@ if __name__ == "__main__":
     print(f"Last Name: {person.last_name}")
     print(f"Date of Birth: {person.date_of_birth}")
     print(f"\nFull details:\n{person}")
-
