@@ -1,0 +1,20 @@
+[project]
+name = "text-embeddings"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Kausthub Krishnamurthy",email = "kausthub.k@live.com"}
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "nltk (>=3.9.2,<4.0.0)",
+    "gensim (>=4.4.0,<5.0.0)"
+]
+
+[tool.poetry]
+package-mode = false
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
