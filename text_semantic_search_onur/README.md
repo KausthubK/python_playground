@@ -7,3 +7,4 @@ Datasets:
 - products.csv - custom generated products dataset from GPT-4.1
 - pokemon.csv - from kaggle but also available on open data bay https://www.opendatabay.com/data/ai-ml/58d7a930-9263-46d7-a0ca-0ab5817ae4ae
 
+To run all of these tutorials a few times while embeddings i've used a total of 77.4k input tokens, and spent just under $0.01.
