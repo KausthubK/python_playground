@@ -40,8 +40,7 @@ def encode(data: list) -> list[tuple]:
 
 def decode(encoded: list[tuple]) -> list:
     decoded = []
-    if encoded:
-        for k,v in encoded:
-            to_add = [k]*v
-            decoded.extend(to_add)
+    for k,v in encoded:
+        to_add = [k]*v
+        decoded.extend(to_add)
     return decoded
