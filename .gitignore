@@ -130,3 +130,5 @@ dmypy.json
 .pyre/
 local_cache/
 
+.data_cache/
+.idea/
