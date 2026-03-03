@@ -1,0 +1,18 @@
+[project]
+name = "numercial-bs"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Kausthub Krishnamurthy",email = "kausthub.k@live.com"}
+]
+requires-python = ">=3.10"
+dependencies = [
+    "numpy (==1.24.4)",
+    "pandas (==1.5.3)",
+    "pytest (==6.2.5)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

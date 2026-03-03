@@ -1,0 +1,44 @@
+"""
+Problem 7: String & Array Manipulation
+========================================
+~10 minutes | Pure Python (no external imports)
+
+Part A: Group Anagrams
+Given a list of strings, group the anagrams together. Two strings are anagrams
+if they contain the same characters with the same frequencies.
+
+    group_anagrams(words: list[str]) -> list[list[str]]
+    - Returns groups of anagrams (each group is a list of strings)
+    - Within each group, strings should be in the order they appeared in the input
+    - The groups themselves should be ordered by the index of their first element
+      in the input (i.e., the group containing words[0] comes first)
+    - Empty input returns []
+
+    Example:
+        group_anagrams(["eat", "tea", "tan", "ate", "nat", "bat"])
+        -> [["eat", "tea", "ate"], ["tan", "nat"], ["bat"]]
+
+Part B: Can Form Palindrome
+Given a string, determine if any permutation of it could form a palindrome.
+
+    can_form_palindrome(s: str) -> bool
+    - A palindrome reads the same forwards and backwards
+    - For even-length strings: every character must appear an even number of times
+    - For odd-length strings: at most one character can appear an odd number of times
+    - Empty string is a palindrome
+
+    Examples:
+        can_form_palindrome("civic") -> True   (already a palindrome)
+        can_form_palindrome("aab") -> True      (can form "aba")
+        can_form_palindrome("abc") -> False     (no palindrome possible)
+
+Constraint: No external imports. Use only built-in Python.
+"""
+
+
+def group_anagrams(words: list[str]) -> list[list[str]]:
+    raise NotImplementedError
+
+
+def can_form_palindrome(s: str) -> bool:
+    raise NotImplementedError
