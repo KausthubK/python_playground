@@ -46,4 +46,10 @@ def detect_anomalies(
     window: int,
     threshold: float,
 ) -> pd.DataFrame:
-    raise NotImplementedError
+    df_copy = df.copy(deep=True)
+    df_copy['rolling_mean'] = df_copy[value_col].rolling(window=window, min_periods=1).mean()
+    df_copy['rolling_std'] = df_copy[value_col].rolling(window=window, min_periods=1).std()
+    df_copy['z_score'] = abs(df_copy[value_col] - df_copy['rolling_mean']) / df_copy['rolling_std']
+    df_copy['z_score'] = df_copy['z_score'].fillna(0.0)
+    df_copy['is_anomaly'] = df_copy["z_score"] > threshold
+    return df_copy

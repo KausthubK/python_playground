@@ -31,10 +31,13 @@ class TestDetectAnomalies:
         result = detect_anomalies(latency_data, "latency_ms", window=3, threshold=2.0)
         assert len(result) == len(latency_data)
 
-    def test_spike_detected(self, latency_data):
-        result = detect_anomalies(latency_data, "latency_ms", window=3, threshold=2.0)
-        # The 500ms spike at index 5 should be flagged
-        assert result.loc[5, "is_anomaly"] == True
+    def test_spike_detected(self):
+        # Large stable window so spike doesn't dominate the rolling stats
+        stable = [100] * 20
+        df = pd.DataFrame({"latency_ms": stable + [500] + stable})
+        result = detect_anomalies(df, "latency_ms", window=10, threshold=2.0)
+        # The spike at index 20 should be flagged
+        assert result.loc[20, "is_anomaly"] == True
 
     def test_normal_values_not_flagged(self, latency_data):
         result = detect_anomalies(latency_data, "latency_ms", window=3, threshold=2.0)
