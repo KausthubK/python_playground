@@ -44,7 +44,7 @@ def _row_wise_feature_computation(r: pd.Series) -> tuple[int, str, int, float]:
 
 
 def compute_user_features(events: pd.DataFrame) -> pd.DataFrame:
-    events['date'] = events.apply(lambda r: r.timestamp.date(), axis=1)
+    events['date'] = events['timestamp'].dt.date
     user_aggs = events[
         ['user_id', 'event_type', 'design_id', 'date']
     ].groupby(['user_id']).agg(
@@ -63,3 +63,28 @@ def compute_user_features(events: pd.DataFrame) -> pd.DataFrame:
     )
     return user_aggs[["total_events", "unique_designs", "most_common_event", "days_active", "export_rate"]]
 
+# def compute_user_features(events: pd.DataFrame) -> pd.DataFrame:
+#     grouped = events.groupby('user_id')
+
+#     total_events = grouped['event_type'].count()
+#     unique_designs = grouped['design_id'].nunique()
+    
+#     # nope... these two lines are terrible for performance.
+#     # rule of thumb: you want to agg with the SIMPLEST vectorised aggregations
+#     # e.g. set, count, mean, etc. anything more complex like a lambda basically makes you
+#     # loop through a lot.
+#     most_common_event = grouped['event_type'].agg(lambda x: x.mode().iloc[0])
+#     days_active = grouped['timestamp'].agg(lambda x: x.dt.date.nunique())
+
+#     export_counts = events[events['event_type'] == 'export'].groupby('user_id').size()
+#     export_rate = (export_counts / total_events).fillna(0.0)
+
+#     result = pd.DataFrame({
+#         'total_events': total_events,
+#         'unique_designs': unique_designs,
+#         'most_common_event': most_common_event,
+#         'days_active': days_active,
+#         'export_rate': export_rate,
+#     })
+#     result.index.name = 'user_id'
+#     return result.sort_index()
