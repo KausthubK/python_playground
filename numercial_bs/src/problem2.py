@@ -24,5 +24,18 @@ Constraint: Must be VECTORIZED. No Python for-loops over rows.
 import numpy as np
 
 
-def cosine_similarity_matrix(X: np.ndarray) -> np.ndarray:
-    raise NotImplementedError
+def cosine_similarity_matrix(X: np.ndarray) -> np.ndarray: 
+    numerator = np.matmul(X, X.T) # X@X.T
+    norms = np.linalg.norm(X, axis=1)
+    denomenator = np.outer(norms, norms)
+    csm = numerator / denomenator
+    return np.nan_to_num(csm)
+
+# def _cosine_sim_two_vectors(u: np.ndarray, v: np.ndarray) -> float:
+#     numerator = np.dot(a=u, b=v)
+#     u_norm = np.linalg.norm(u)
+#     v_norm = np.linalg.norm(u)
+#     denomenator = u_norm * v_norm
+#     if denomenator == 0.0:
+#         return 0.0
+#     return numerator / denomenator
