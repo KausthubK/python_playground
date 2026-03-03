@@ -104,3 +104,61 @@ The bottleneck depends on the approach:
 - `most_common_event`: do `groupby(['user_id', 'event_type']).size()`, then pick the max per user — fully vectorized
 - `days_active`: pre-compute `events['date'] = events['timestamp'].dt.date` (vectorized), then `groupby('user_id')['date'].nunique()` (C-level nunique)
 - `export_rate`: filter + groupby + size, then divide — already fast
+
+## Beyond Pandas: Polars & DuckDB
+
+At true scale, the right answer is to leave pandas entirely. Both **Polars** and **DuckDB** express all aggregations as compiled native operations — no Python-level per-group calls.
+
+### Polars (Rust-based, multi-threaded)
+```python
+df.group_by("user_id").agg(
+    pl.col("event_type").count().alias("total_events"),
+    pl.col("design_id").n_unique().alias("unique_designs"),
+    pl.col("event_type").mode().first().alias("most_common_event"),
+    pl.col("timestamp").cast(pl.Date).n_unique().alias("days_active"),
+    (pl.col("event_type") == "export").mean().alias("export_rate"),
+)
+```
+
+### DuckDB (vectorized SQL engine, queries pandas DataFrames directly)
+```sql
+SELECT user_id,
+       count(*) AS total_events,
+       count(DISTINCT design_id) AS unique_designs,
+       mode(event_type) AS most_common_event,
+       count(DISTINCT CAST(timestamp AS DATE)) AS days_active,
+       avg(CASE WHEN event_type = 'export' THEN 1.0 ELSE 0.0 END) AS export_rate
+FROM events GROUP BY user_id
+```
+
+### Why they're faster (compute)
+
+| | pandas | polars | duckdb |
+|---|---|---|---|
+| `count`/`nunique` | C-level | Rust, parallel | Vectorized C++ |
+| `mode()` per group | **Python callable** | Rust expression | Vectorized C++ |
+| `dt.date.nunique` | **Python callable** | Rust expression | Vectorized C++ |
+| Parallelism | Single-threaded | Multi-threaded | Multi-threaded |
+
+The key: in polars/duckdb, `mode()` is a **native operation**, not a Python function dispatched per group. At 500K rows expect 5-20x speedup. At 100M rows the gap widens because they also parallelize across cores.
+
+### Why they're also better on memory
+
+Pandas stores each string as a Python `str` object on the heap (~50 bytes overhead each). Polars and DuckDB both use **Apache Arrow** columnar format:
+
+- Strings stored as contiguous byte buffers with offset arrays — no per-string object overhead
+- Low-cardinality columns (like `event_type` with 4 values) get automatic dictionary encoding — stored as integers + lookup table
+- No intermediate Python containers during aggregation
+- Zero-copy between polars and DuckDB since both speak Arrow natively
+
+Rough memory comparison for a string column (1M rows of "export"):
+
+| | pandas | polars/duckdb |
+|---|---|---|
+| Storage model | ~50 bytes/string object + pointer | ~bytes of content + 4-byte offset |
+| 1M rows of "export" | ~56 MB | ~10 MB (or ~4 MB with dict encoding) |
+
+At 100M rows expect **3-10x less memory** depending on column types, plus no transient Python object allocations during groupby.
+
+### Interview takeaway
+"I'd reach for polars or duckdb at scale because pandas can't express complex aggregations without falling back to Python per-group — and both give you multi-threaded execution and Arrow-based memory efficiency for free."
