@@ -39,12 +39,13 @@ Usage example:
 Constraint: No external imports. Preserve insertion order of steps.
 """
 
-from typing import Callable
+from typing import Callable, OrderedDict
 
 
 class Pipeline:
     def __init__(self):
-        self._all_steps: list[tuple[str, Callable]] = []
+        self._step_lookup: OrderedDict[str, Callable] = OrderedDict()
+        
     
     def add_step(self, name: str, fn) -> "Pipeline":
         """
@@ -54,7 +55,7 @@ class Pipeline:
         """
         if name in self.steps():
             raise ValueError(f"Step with name {name} already exists in pipeline with steps: {self.steps}")
-        self._all_steps.append((name, fn))
+        self._step_lookup[name] = fn
         return self
 
     def remove_step(self, name: str) -> "Pipeline":
@@ -65,8 +66,7 @@ class Pipeline:
         """
         if name not in self.steps():
             raise KeyError(f"Step not found with name {name} in pipeline with steps: {self.steps}")
-        remaining_steps = [(n, fn) for n, fn in self._all_steps if n != name]
-        self._all_steps = remaining_steps
+        self._step_lookup.pop(name)
         return self
 
     def execute(self, data):
@@ -76,13 +76,12 @@ class Pipeline:
         - Returns the final result
         - If no steps, returns data unchanged
         """
-        if self.steps():
-            for _, step_fn in self._all_steps:
-                data = step_fn(data)
+        for _, step_fn in self._step_lookup.items():
+            data = step_fn(data)
         return data
 
     def steps(self) -> list[str]:
         """
         - Returns the list of step names in insertion order
         """
-        return [s[0] for s in self._all_steps]
+        return list(self._step_lookup.keys())
