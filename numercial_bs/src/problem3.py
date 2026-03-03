@@ -27,8 +27,39 @@ Implement:
 The returned DataFrame should be sorted by user_id (ascending).
 """
 
+from collections import Counter
 import pandas as pd
 
 
+def _row_wise_feature_computation(r: pd.Series) -> tuple[int, str, int, float]:
+    total_events = len(r.event_type)
+    num_unique_designs = len(r.design_id)
+    cl = Counter(r.event_type)
+    most_common_event = cl.most_common()[0][0]
+    days_active = len(r.date)
+    export_rate = 0.0
+    if total_events > 0:
+        export_rate = cl['export'] / total_events
+    return total_events, num_unique_designs, most_common_event, days_active, export_rate
+
+
 def compute_user_features(events: pd.DataFrame) -> pd.DataFrame:
-    raise NotImplementedError
+    events['date'] = events.apply(lambda r: r.timestamp.date(), axis=1)
+    user_aggs = events[
+        ['user_id', 'event_type', 'design_id', 'date']
+    ].groupby(['user_id']).agg(
+        {
+            'design_id': set,
+            'date': set,
+            'event_type': list,
+        }
+    )
+    user_aggs[[
+        "total_events", "unique_designs", "most_common_event", "days_active", "export_rate",
+    ]] = user_aggs.apply(
+        lambda r: _row_wise_feature_computation(r),
+        axis=1,
+        result_type='expand',
+    )
+    return user_aggs[["total_events", "unique_designs", "most_common_event", "days_active", "export_rate"]]
+
