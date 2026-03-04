@@ -35,10 +35,30 @@ Given a string, determine if any permutation of it could form a palindrome.
 Constraint: No external imports. Use only built-in Python.
 """
 
+from collections import Counter
+import pandas as pd
 
 def group_anagrams(words: list[str]) -> list[list[str]]:
-    raise NotImplementedError
+    groups = []
+    if words:
+        counters = [Counter(i) for i in words]
+        df = pd.DataFrame(counters, index=words).fillna(0).astype(int)
+        groups = df.groupby(list(df.columns), sort=False).apply(lambda g: g.index.tolist()).tolist()
+    return groups
 
+def _is_odd(i: int) -> bool:
+    return bool(i % 2)
 
 def can_form_palindrome(s: str) -> bool:
-    raise NotImplementedError
+    if len(s) == 0:
+        return True # trivial case
+    c = Counter(s)
+    odd_count_chars = [k for k, v in dict(c).items() if _is_odd(v)]
+    if _is_odd(i=len(s)):
+        if len(odd_count_chars) == 1:
+            return True
+        return False
+    else:
+        if len(odd_count_chars) == 0:
+            return True
+        return False

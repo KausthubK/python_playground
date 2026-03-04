@@ -1,7 +1,7 @@
 import threading
 import time
 import pytest
-from src.problem6 import BoundedBuffer, thread_safe_sum
+from src.problem6 import BoundedBuffer, thread_safe_sum, multi_pool_sum
 
 
 class TestBoundedBufferBasics:
@@ -137,3 +137,24 @@ class TestThreadSafeSum:
 
     def test_negative_numbers(self):
         assert thread_safe_sum([-1, -2, 3, 4], num_threads=2) == 4
+
+
+class TestMultiprocessSum:
+    def test_basic(self):
+        assert multi_pool_sum([1, 2, 3, 4, 5], num_workers=2) == 15
+
+    def test_single_worker(self):
+        assert multi_pool_sum([10, 20, 30], num_workers=1) == 60
+
+    def test_more_workers_than_items(self):
+        assert multi_pool_sum([5, 5], num_workers=4) == 10
+
+    def test_empty_list(self):
+        assert multi_pool_sum([], num_workers=2) == 0
+
+    def test_large_list(self):
+        numbers = list(range(10_000))
+        assert multi_pool_sum(numbers, num_workers=4) == sum(numbers)
+
+    def test_negative_numbers(self):
+        assert multi_pool_sum([-1, -2, 3, 4], num_workers=2) == 4
