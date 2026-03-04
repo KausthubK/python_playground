@@ -30,4 +30,41 @@ Hint: Use a stack to handle parentheses.
 
 
 def calculate(s: str) -> int:
-    raise NotImplementedError
+    expression = s.replace(' ', '')
+    i = 0
+    stack = []
+    current_result = 0
+    current_sign = 1
+
+    while i < len(expression):
+        ch = expression[i]
+
+        if ch.isnumeric():
+            # collect full multi-digit number
+            j = i
+            while j < len(expression) and expression[j].isnumeric():
+                j += 1
+            num = int(expression[i:j])
+            current_result += current_sign * num
+            i = j  # skip past the number
+            continue
+
+        if ch == '+':
+            current_sign = 1
+        elif ch == '-':
+            current_sign = -1
+        elif ch == '(':
+            # save context and reset
+            stack.append(current_result)
+            stack.append(current_sign)
+            current_result = 0
+            current_sign = 1
+        elif ch == ')':
+            # restore context: saved_sign * sub_result + saved_result
+            saved_sign = stack.pop()
+            saved_result = stack.pop()
+            current_result = saved_result + saved_sign * current_result
+
+        i += 1
+
+    return current_result
