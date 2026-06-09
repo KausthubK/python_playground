@@ -36,6 +36,20 @@ Constraint: Must update in-place. No external imports required,
             but numpy is available if you want it.
 """
 
+import numpy as np
+
 
 def game_of_life(board: list[list[int]]) -> None:
-    raise NotImplementedError
+    arr = np.array(board)
+    padded = np.pad(arr, 1)
+    neighbors = (
+        padded[0:-2, 0:-2] + padded[0:-2, 1:-1] + padded[0:-2, 2:] +
+        padded[1:-1, 0:-2] +                       padded[1:-1, 2:] +
+        padded[2:,   0:-2] + padded[2:,   1:-1] + padded[2:,   2:]
+    )
+    next_state = ((arr == 1) & (neighbors >= 2) & (neighbors <= 3)) | ((arr == 0) & (neighbors == 3))
+    
+    result = next_state.astype(int)
+    for i in range(len(board)):
+        for j in range(len(board[0])):
+            board[i][j] = result[i][j]
